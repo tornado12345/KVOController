@@ -10,7 +10,7 @@
 #import "FBKVOController.h"
 
 #import <objc/message.h>
-#import <pthread/pthread.h>
+#import <pthread.h>
 
 #if !__has_feature(objc_arc)
 #error This file must be compiled with ARC. Convert your project to ARC or specify the -fobjc-arc flag.
@@ -348,7 +348,7 @@ NSString *const FBKVONotificationKeyPathKey = @"FBKVONotificationKeyPathKey";
 
 - (void)observeValueForKeyPath:(nullable NSString *)keyPath
                       ofObject:(nullable id)object
-                        change:(nullable NSDictionary<NSString *, id> *)change
+                        change:(nullable NSDictionary<NSKeyValueChangeKey, id> *)change
                        context:(nullable void *)context
 {
   NSAssert(context, @"missing context keyPath:%@ object:%@ change:%@", keyPath, object, change);
@@ -374,7 +374,7 @@ NSString *const FBKVONotificationKeyPathKey = @"FBKVONotificationKeyPathKey";
 
         // dispatch custom block or action, fall back to default action
         if (info->_block) {
-          NSDictionary<NSString *, id> *changeWithKeyPath = change;
+          NSDictionary<NSKeyValueChangeKey, id> *changeWithKeyPath = change;
           // add the keyPath to the change dictionary for clarity when mulitple keyPaths are being observed
           if (keyPath) {
             NSMutableDictionary<NSString *, id> *mChange = [NSMutableDictionary dictionaryWithObject:keyPath forKey:FBKVONotificationKeyPathKey];
